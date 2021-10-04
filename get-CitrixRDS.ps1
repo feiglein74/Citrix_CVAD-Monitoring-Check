@@ -6,19 +6,25 @@ Try {
     } 
     Else{
         Write-Host Kein Snapin installiert
-        exit
+        exit 3
     }
 }Catch{
 }
 
-try{
-$DesktopGroupMember = Get-BrokerMachine  | where RegistrationState -eq Registered
 
-$RDSLIC = Invoke-Command -ComputerName $DesktopGroupMember[0].DNSName {Get-ItemProperty -Path 'HKLm:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name LicenseServers } 
-write-host $RDSLIC.LicenseServers
+
+try{
+    #speichere einen laufenden worker in eine Variable 
+    $DesktopGroupMember = Get-BrokerMachine  | where RegistrationState -eq Registered
+
+
+    #Lese den RDS Lizenz Server des Workers aus
+    $RDSLIC = Invoke-Command -ComputerName $DesktopGroupMember[0].DNSName {Get-ItemProperty -Path 'HKLm:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name LicenseServers } 
+    write-host $RDSLIC.LicenseServers
+    exit 0
 }
 catch{
 
     Write-Host Fehler beim auslesen des RDS Servers
-
+    exit 3
     }
