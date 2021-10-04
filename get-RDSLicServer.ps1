@@ -6,6 +6,6 @@ write-host $RDSLIC.LicenseServers
 }
 catch{
 
-    Write-Host Fehler beim auslesen des RDS Servers
+    Write-Host Fehler beim auslesen des RDS-Lizenzservers Servers
 
     }
