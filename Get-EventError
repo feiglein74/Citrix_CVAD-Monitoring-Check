@@ -1,3 +1,11 @@
+#es können beim Ausführen die Parameter event, log, Month,Day,Hours und Count mitgegeben werden
+#Event und Log sind verpflichtende parameter
+#Event: es muss eine Event nummer mit übergeben werden
+#Log es muss das Log angegeben werden das überprüft wird
+
+#mit Month,Days,Hours kann man angeben wie weit zurück das Eventlog überprüft wird
+#Count sagt aus wan eine Warnung ausgegeben wird
+
 param (
     $event,
     [ValidateSet('Application','System')]
@@ -15,14 +23,17 @@ $returnUnknown = 3
 $returnCode = $returnOK
 
 
+
+#Schreibt das Datum bis zu dem überprüft wird in eine Variable
 $date = (get-date).AddMonths(-$Month).AddDays(-$Days).AddHours(-$Hours)
 
 #Get-WinEvent -LogName app* | Select-Object -first 1  | Get-member
 
+
+
 $hash = @{LogName=$log;ID=$event;StartTime=$date}
 
 $event = Get-WinEvent -FilterHashtable $hash -ErrorAction Ignore | Group-Object -Property ID
-write $event
 
 if($event.count -lt $count){
     write $returnOK
