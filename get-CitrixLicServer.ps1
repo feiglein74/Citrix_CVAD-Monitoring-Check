@@ -6,7 +6,7 @@ Try {
     } 
     Else{
         Write-Host Kein Snapin installiert
-        exit
+        exit 3
     }
 }Catch{
 
@@ -17,7 +17,9 @@ try{
     $lizenz = Get-BrokerController | select LastLicensingServerEventDetails
     $lizenzserver = $lizenz[0].LastLicensingServerEventDetails -split ": "
     Write-Host $lizenzserver[1]
+    exit 0
 }
 catch{
     write-host Fehler beim auslesen
+    exit 3
 }
