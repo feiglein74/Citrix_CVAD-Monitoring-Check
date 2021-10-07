@@ -1,6 +1,6 @@
 $CVADSiteVersion = Get-ConfigSite
 if($CVADSiteVersion.ProductVersion -gt "7.28" ){
-    write "Aktueller als CVAD 2012"
+    write "Aktueller als CVAD 2012 (" $CVADSiteVersion.ProductVersion ")"
 }else{
 
     Switch ($CVADSiteVersion.ProductVersion){
