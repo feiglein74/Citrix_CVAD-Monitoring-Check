@@ -1,3 +1,13 @@
+# get-CitrixRDS.ps1
+# 07.10.2021
+# Gerhard Unter
+#
+# Ruft den Registry Key auf dem ersten 'Worker' ab, in dem der Terminlserver-Lizenzserver gespeichert ist und gibt ihn aus.
+# Das Script ruft diesen Key vom ersten registrierten Server ab.
+#
+# Edit - Sascha Feig - 07-10-2021 - Bedingung bei SessionSupport angepasst
+#
+
 #try to install Citrix Snapins 
 #wenn nicht möglich exit Script
 Try { 
@@ -15,7 +25,7 @@ Try {
 
 try{
     #speichere einen laufenden worker in eine Variable 
-    $DesktopGroupMember = Get-BrokerMachine  | where RegistrationState -eq Registered
+    $DesktopGroupMember = Get-BrokerMachine  | where SessionSupport -eq "Multisession" | where RegistrationState -eq Registered 
 
 
     #Lese den RDS Lizenz Server des Workers aus
