@@ -6,21 +6,25 @@
 # Das Script ruft diesen Key vom ersten registrierten Server ab.
 #
 # Edit - Sascha Feig - 07-10-2021 - Bedingung bei SessionSupport angepasst
+# Edit - Gerhard Unter angepasster Try -Catch bei Add-Pssnapin
 #
 
 #try to install Citrix Snapins 
 #wenn nicht möglich exit Script
 Try { 
+
+    Add-PsSnapin "Citrix.*" -ErrorAction SilentlyContinue
     if((Get-PSSnapin -Name "Citrix.*" -ErrorAction SilentlyContinue)){ 
-        Add-PsSnapin "Citrix.*" 
+
     } 
     Else{
         Write-Host Kein Snapin installiert
         exit 3
     }
 }Catch{
+    Write-Host Kein Snapin installiert
+    exit 3
 }
-
 
 
 try{
