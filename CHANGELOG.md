@@ -2,6 +2,19 @@
 
 Alle relevanten Änderungen an diesem Projekt. Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [3.0.0] – 2026-10-10
+
+### Geändert (Breaking)
+
+- `Get-CitrixWorker.ps1`: Ausgabe als echtes CSV (`ConvertTo-Csv`, Trennzeichen `;`, alle Felder in Anführungszeichen) statt ` ; ` mit Leerzeichen. **Parser im Monitoring-Agent anpassen**
+- `Get-CitrixSFSync.ps1`: ist jetzt ein Check – erste Zeile Status (`OK - …` / `CRITICAL - …`), Exit-Code 2 wenn die Replikation gesamt oder auf einem Server nicht `completed` ist. Danach Tabellen für Gesamtstatus und Status pro Server (bisher eine Tabelle, Exit-Code immer 0)
+- `Get-CitrixRDS.ps1`: prüft alle registrierten Multisession-Worker statt nur den ersten. Bei einheitlichem Eintrag Ausgabe wie bisher; bei Abweichungen, fehlendem Eintrag oder nicht erreichbaren Workern `WARNING - …` mit einer Zeile pro Worker und Exit-Code 1
+
+### Hinzugefügt
+
+- `Get-CitrixVersion.ps1`: Versionen 7.42 bis 7.48 (CVAD 2407 bis 2607, 2507 als LTSR)
+- README: Abschnitt "Quellen" mit den Grundlagen für Versionstabelle und StoreFront-Statuswerte; Quellen-URLs zusätzlich als Kommentar in den Skripten
+
 ## [2.0.0] – 2026-10-10
 
 ### Geändert (Breaking)

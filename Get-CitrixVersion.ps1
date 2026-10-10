@@ -27,11 +27,20 @@ catch{
     exit 3
 }
 
-if($ProductVersion -gt [version]"7.41"){
-    Write-Output "Aktueller als CVAD 2402 LTSR ($($CVADSiteVersion.ProductVersion))"
+#Zuordnung ProductVersion -> Release laut https://www.carlwebster.com/citrix-xenapp-xendesktop-virtual-apps-and-desktop-product-numbers-and-versions/ (Stand 10.10.2026)
+#LTSR-Kennzeichnung laut Citrix Docs, z.B. https://docs.citrix.com/en-us/citrix-virtual-apps-desktops/2507-ltsr/
+if($ProductVersion -gt [version]"7.48"){
+    Write-Output "Aktueller als CVAD 2607 ($($CVADSiteVersion.ProductVersion))"
 }else{
 
     Switch ("$ProductVersion"){
+        "7.48"	{$CVADSiteVersionReal = "CVAD 2607"; Break}
+        "7.47"	{$CVADSiteVersionReal = "CVAD 2603"; Break}
+        "7.46"	{$CVADSiteVersionReal = "CVAD 2511"; Break}
+        "7.45"	{$CVADSiteVersionReal = "CVAD 2507 LTSR"; Break}
+        "7.44"	{$CVADSiteVersionReal = "CVAD 2503"; Break}
+        "7.43"	{$CVADSiteVersionReal = "CVAD 2411"; Break}
+        "7.42"	{$CVADSiteVersionReal = "CVAD 2407"; Break}
         "7.41"	{$CVADSiteVersionReal = "CVAD 2402 LTSR"; Break}
         "7.40"	{$CVADSiteVersionReal = "CVAD 2311"; Break}
         "7.39"	{$CVADSiteVersionReal = "CVAD 2308"; Break}

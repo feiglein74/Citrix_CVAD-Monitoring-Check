@@ -42,20 +42,30 @@ Stand: 10.10.2026
 
 - [x] Dateinamen einheitlich in PascalCase nach PowerShell-Schema `Verb-Noun` (`Get-…`)
 
+## Erledigt (v3.0.0)
+
+- [x] **Get-CitrixVersion.ps1** – Versionstabelle bis 7.48 (CVAD 2607) ergänzt, Quelle: Carl Webster (Community-Tabelle)
+- [x] **Get-CitrixSFSync.ps1** – Critical, wenn die Replikation gesamt oder auf einem Server nicht `completed` ist; Einzelserver = OK
+- [x] **Get-CitrixWorker.ps1** – echtes CSV per `ConvertTo-Csv`
+- [x] **Get-CitrixRDS.ps1** – alle Multisession-Worker prüfen, Abweichungen als Warning
+- [x] Logik der Citrix-Skripte mit gemockten Cmdlets in PS 5.1 und 7 getestet (22 Fälle)
+
 ## Offen
 
 ### Vor dem Rollout klären/testen
 
 - [ ] **Monitoring-Agent-Konfiguration anpassen** (v2.0.0): `get-CitrixLicence.ps1` → `Get-CitrixLicense.ps1`, `get-eventlog.ps1` → `Get-EventSourceReport.ps1`. Die übrigen Umbenennungen betreffen nur Groß-/Kleinschreibung und funktionieren unter Windows ohne Anpassung
-
-- [ ] **Alle Skripte auf Delivery Controller / StoreFront-Server testen** – Citrix-Teile sind lokal nicht testbar, nur Syntax + Linter geprüft
+- [ ] **Alle Skripte auf Delivery Controller / StoreFront-Server testen** – lokal nur Syntax, Linter und Logik mit gemockten Citrix-Cmdlets geprüft
 - [ ] **Get-EventError.ps1** – liefert jetzt zusätzlich Exit-Code 1/2/3. Prüfen, ob der Monitoring-Agent einen Exit-Code ≠ 0 als "Skript fehlgeschlagen" statt als Status interpretiert
+- [ ] **Get-CitrixWorker.ps1** (v3.0.0) – CSV-Format geändert, Parser im Agent anpassen
+- [ ] **Get-CitrixSFSync.ps1** – auf StoreFront prüfen: ist das Modul `Citrix.StoreFront` ladbar (Cluster-Erkennung) und lautet der Status tatsächlich `completed`?
+- [ ] **Get-CitrixRDS.ps1** – Laufzeit bei vielen bzw. nicht erreichbaren Workern gegen das Timeout des Agents prüfen (OpenTimeout 15 s, parallel)
 - [ ] Welcher Monitoring-Agent wird eingesetzt und wertet er stdout oder Exit-Code aus? → in README dokumentieren
 
 ### Fachlich zu entscheiden
 
-- [ ] **Get-CitrixVersion.ps1** – Versionstabelle ab 7.42 (CVAD 2407 ff.) gegen Citrix-Doku prüfen und ergänzen
-- [ ] **Get-CitrixLicense.ps1** – Warning/Critical bei bald ablaufenden Lizenzen bzw. Subscription Advantage?
-- [ ] **Get-CitrixSFSync.ps1** – Critical, wenn `LastUpdateStatus` nicht `Complete` ist?
-- [ ] **Get-CitrixWorker.ps1** – Datenzeilen nutzen ` ; ` als Trennzeichen (Header `;`). Bewusst beibehalten wegen Kompatibilität, auf sauberes CSV umstellen, wenn der Agent-Parser angepasst wird?
-- [ ] **Get-CitrixRDS.ps1** – prüft nur den ersten Multisession-Worker. Alle Worker prüfen und Abweichungen melden?
+- [ ] **Get-CitrixLicense.ps1 / Get-CitrixLicServer.ps1** – Umgebung ist inzwischen über Citrix Cloud lizenziert. Werden die beiden Skripte noch gebraucht?
+
+## Verworfen
+
+- ~~**Get-CitrixLicense.ps1** – Warning/Critical bei bald ablaufenden Lizenzen~~ – entfällt, Lizenzierung läuft über Citrix Cloud

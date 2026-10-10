@@ -47,7 +47,9 @@ APPLICATION (alle Eintraege)
 
 Die Skripte werden von einem Monitoring-Agent aufgerufen, der stdout und/oder den Exit-Code auswertet. Eine Änderung am Ausgabeformat kann eine Prüfung unbemerkt kaputt machen.
 
-**Regel:** Bestehende Ausgabeformate bleiben bytegleich, solange der Agent-Parser nicht mit angepasst wird. Formatänderungen werden im CHANGELOG als solche markiert.
+**Regel:** Bestehende Ausgabeformate bleiben bytegleich, solange der Agent-Parser nicht mit angepasst wird. Formatänderungen werden im CHANGELOG als Breaking markiert (Major-Version).
+
+Wird ein Check um eine Bewertung erweitert, bleibt die bisherige Ausgabe im Gutfall möglichst erhalten und nur der Problemfall bekommt ein neues Format (Beispiel `Get-CitrixRDS.ps1`: einheitlich → nur der Lizenzserver wie bisher, Abweichung → `WARNING - …` mit Liste).
 
 ```powershell
 # ❌ FALSCH - "verbesserte" Ausgabe, Agent erwartet nur die Zahl
@@ -60,7 +62,6 @@ exit $returnCode
 
 Beispiele für bewusst beibehaltene Eigenheiten:
 - `Get-EventError.ps1` gibt nur den Statuscode aus (daher auch keine Fehlerdetails – Ausnahme zu Prinzip "Fehler-Details vollständig")
-- `Get-CitrixWorker.ps1` trennt Datenzeilen mit ` ; ` (so hat `Write-Host` die Argumente früher verbunden)
 - `Get-CitrixLicServer.ps1` gibt `True <server>` / `False <server>` aus und endet immer mit 0 (Info-Check)
 
 ### Exit-Codes nach Nagios-Schema

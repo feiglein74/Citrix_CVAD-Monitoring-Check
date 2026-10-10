@@ -25,20 +25,25 @@ catch{
     exit 3
 }
 
-Write-Output "DeliveryGroup;DNSName;IPAddress;SessionSupport;InMaintenanceMode;Tags;PowerState;RegistrationState"
-foreach ($Member in $DesktopGroupMember)
-{
-    #Trennzeichen " ; " entspricht der bisherigen Ausgabe von Write-Host
-    $fields = @(
-        $Member.DesktopGroupName
-        $Member.DNSName
-        $Member.IPAddress
-        $Member.SessionSupport
-        $Member.InMaintenanceMode
-        ($Member.Tags -join ',')
-        $Member.PowerState
-        $Member.RegistrationState
-    )
-    Write-Output ($fields -join ' ; ')
+#Ausgabe als CSV mit ";" als Trennzeichen, alle Felder in Anführungszeichen (ConvertTo-Csv)
+#mehrere Tags werden mit "," verbunden
+$header = '"DeliveryGroup";"DNSName";"IPAddress";"SessionSupport";"InMaintenanceMode";"Tags";"PowerState";"RegistrationState"'
+if(@($DesktopGroupMember).Count -eq 0){
+    #ConvertTo-Csv gibt ohne Objekte auch keinen Header aus
+    Write-Output $header
+    exit 0
 }
+
+$DesktopGroupMember | ForEach-Object {
+    [pscustomobject][ordered]@{
+        DeliveryGroup     = $_.DesktopGroupName
+        DNSName           = $_.DNSName
+        IPAddress         = $_.IPAddress
+        SessionSupport    = $_.SessionSupport
+        InMaintenanceMode = $_.InMaintenanceMode
+        Tags              = ($_.Tags -join ',')
+        PowerState        = $_.PowerState
+        RegistrationState = $_.RegistrationState
+    }
+} | ConvertTo-Csv -Delimiter ';' -NoTypeInformation
 exit 0
