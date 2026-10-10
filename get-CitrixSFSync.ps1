@@ -1,5 +1,5 @@
-﻿#try to install StoreFront Snapin
-#wenn nicht möglich exit Script
+﻿#StoreFront-Snapin laden
+#wenn nicht möglich: Meldung und exit 3 (Unknown)
 Try {
 
     Add-PSSnapin Citrix.DeliveryServices.ConfigurationReplication.Commands -ErrorAction SilentlyContinue
@@ -16,7 +16,7 @@ Try {
 }
 
 try{
-    #Gibt das Letzte Storefront Sync-Datum aus
+    #Replikationsstatus pro StoreFront-Server: Status, Zeitpunkt und Fehler des letzten Syncs
     Get-DSConfigurationReplicationState -ErrorAction Stop | Format-Table ServerName, ServerStates, LastUpdateStatus, LastEndTime, LastError -AutoSize | Out-String -Width 4096
     exit 0
 }

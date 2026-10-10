@@ -32,6 +32,12 @@ Stand: 10.10.2026
 - [x] Tippfehler `InMaintenaceMode` im CSV-Header
 - [x] README, CHANGELOG, LICENSE, DESIGN-PRINCIPLES, .gitignore, .gitattributes
 
+## Erledigt (v1.0.1)
+
+- [x] **get-CitrixRDS.ps1** – 250er-Limit von `Get-BrokerMachine` → Filter im Cmdlet (`-SessionSupport`, `-RegistrationState`)
+- [x] Kommentare an das tatsächliche Verhalten angepasst
+- [x] README: englischer Kopf, Badges, Quickstart; GitHub-Description und Topics
+
 ## Offen
 
 ### Vor dem Rollout klären/testen

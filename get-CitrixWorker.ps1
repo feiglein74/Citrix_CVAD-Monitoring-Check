@@ -1,5 +1,5 @@
-﻿#try to install Citrix Snapins
-#wenn nicht möglich exit Script
+﻿#Citrix-Snapins laden
+#wenn nicht möglich: Meldung und exit 3 (Unknown)
 Try {
 
     Add-PsSnapin "Citrix.*" -ErrorAction SilentlyContinue

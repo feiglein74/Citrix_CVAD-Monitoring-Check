@@ -1,5 +1,5 @@
-﻿#try to install Citrix Snapins
-#wenn nicht möglich exit Script
+﻿#Citrix-Snapins laden
+#wenn nicht möglich: Meldung und exit 3 (Unknown)
 Try {
 
     Add-PsSnapin "Citrix.*" -ErrorAction SilentlyContinue
@@ -22,11 +22,11 @@ try{
         throw "Kein Lizenzserver in der Site konfiguriert"
     }
 
-    #Verbindung mit dem Lizenzserver herstellen und die Lizenzinformationen in eine Variable übergeben
+    #Zertifikat des Lizenzservers holen (Admin-Port 8083), wird für die Inventar-Abfrage benötigt
     $LSAdminAddress = "https://" + $lizenzserver + ":8083"
     $LSCertificate = Get-LicCertificate -AdminAddress $LSAdminAddress -ErrorAction Stop 4>$Null
 
-    #Die gewünschten informationen ausgeben und Formatieren
+    #Lizenzinventar abfragen und als Tabelle formatieren
     #Einträge ohne LicenseEdition (z.B. Startup-License) werden ausgeblendet, die Anzahl wird mit ausgegeben
     $Inventory = @(Get-LicInventory -AdminAddress $LSAdminAddress -CertHash $LSCertificate.CertHash -ErrorAction Stop 4>$Null)
     $Licenses = @($Inventory | Where-Object -Property LicenseEdition -NE "")

@@ -1,11 +1,12 @@
-﻿#es können beim Ausführen die Parameter event, log, Month,Day,Hours und Count mitgegeben werden
-#Event und Log sind verpflichtende parameter
-#Event: es muss eine Event nummer mit übergeben werden
-#Log es muss das Log angegeben werden das überprüft wird
+﻿#Zählt, wie oft eine Event-ID im angegebenen Zeitraum aufgetreten ist
+#Parameter: EventId, Log, Month, Days, Hours, Count, Warning
+#EventId und Log sind verpflichtende Parameter, fehlt einer: exit 3 (Unknown)
+#EventId: eine oder mehrere Event-Nummern
+#Log: das Log, das überprüft wird (Application oder System)
 
 #mit Month,Days,Hours kann man angeben wie weit zurück das Eventlog überprüft wird
-#Count sagt aus wan eine Warnung ausgegeben wird
-#Warning (optional) gibt ab dieser Anzahl Warning aus, Count bleibt die Schwelle für Critical
+#Count: ab dieser Anzahl wird Critical ausgegeben
+#Warning (optional): ab dieser Anzahl wird Warning ausgegeben, 0 = aus
 
 #Ausgabe: nur der Statuscode (0/1/2/3) auf stdout, derselbe Wert ist der Exit-Code
 #der Monitoring-Agent wertet die Ausgabe aus, daher keine weiteren Texte ausgeben
@@ -34,7 +35,7 @@ if(-not $EventId -or -not $Log){
     exit $returnUnknown
 }
 
-#Schreibt das Datum bis zu dem überprüft wird in eine Variable
+#Startzeitpunkt der Prüfung: jetzt minus Month/Days/Hours
 $date = (Get-Date).AddMonths(-$Month).AddDays(-$Days).AddHours(-$Hours)
 
 $hash = @{LogName=$Log;ID=$EventId;StartTime=$date}

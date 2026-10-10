@@ -2,6 +2,17 @@
 
 Alle relevanten Änderungen an diesem Projekt. Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [1.0.1] – 2026-10-10
+
+### Behoben
+
+- `get-CitrixRDS.ps1`: Multisession-Worker wurde nur unter den ersten 250 Maschinen gesucht (Default `MaxRecordCount`). Filter jetzt direkt in `Get-BrokerMachine`, klare Meldung wenn kein Worker registriert ist
+
+### Geändert
+
+- Kommentare in allen Skripten an das tatsächliche Verhalten angepasst (u.a. `Count` in `Get-EventError.ps1` ist die Critical-Schwelle, Snapin wird geladen statt installiert)
+- README: englischer Kopf mit Badges, Beispielausgabe und Quickstart
+
 ## [1.0.0] – 2026-10-10
 
 Erste versionierte Fassung. Der Stand vor dieser Version (Oktober 2021) ist unversioniert.
