@@ -1,5 +1,42 @@
 # Citrix_CVAD-Monitoring-Check
 
+PowerShell health-check scripts for **Citrix Virtual Apps and Desktops (CVAD / XenApp / XenDesktop)**, built to be called by a monitoring agent (Nagios, Icinga, PRTG, Checkmk …) with Nagios-style exit codes.
+
+![License](https://img.shields.io/badge/license-MIT-blue) ![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B-5391FE?logo=powershell&logoColor=white) ![Platform](https://img.shields.io/badge/platform-Windows%20%C2%B7%20Citrix%20DDC%20%2F%20StoreFront-0078D6)
+
+Checks: site version, Citrix license server and license inventory, RDS license server on the workers, VDA/worker inventory, StoreFront replication state, Windows event log thresholds.
+
+```text
+PS> .\Get-EventError.ps1 -EventId 7036 -Log System -Days 7 -Count 1
+2
+PS> $LASTEXITCODE
+2
+```
+
+**Exit codes:** `0` OK · `1` Warning · `2` Critical · `3` Unknown (snap-in missing, read error, missing parameters)
+
+## Quickstart
+
+```powershell
+git clone https://github.com/feiglein74/Citrix_CVAD-Monitoring-Check.git
+cd Citrix_CVAD-Monitoring-Check
+
+# on a Delivery Controller (Citrix PowerShell snap-ins required)
+.\get-CitrixVersion.ps1          # e.g. "CVAD 2203 LTSR"
+.\get-CitrixWorker.ps1           # all machines of the site, semicolon separated
+
+# anywhere: critical if event 1000 occurs 10+ times within the last 4 hours
+.\Get-EventError.ps1 -EventId 1000 -Log Application -Hours 4 -Count 10
+```
+
+Point your monitoring agent at the script and evaluate the exit code (and stdout where noted).
+
+> Detailed documentation is in German.
+
+---
+
+## Überblick
+
 PowerShell-Skripte für den Health-Check einer Citrix Virtual Apps and Desktops (CVAD) Umgebung. Die Skripte werden von einem Monitoring-Agent aufgerufen und liefern Status bzw. Informationen über stdout und Exit-Code.
 
 ## Voraussetzungen
