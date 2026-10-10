@@ -1,14 +1,55 @@
-$CVADSiteVersion = Get-ConfigSite
-if($CVADSiteVersion.ProductVersion -gt "7.28" ){
-    write "Aktueller als CVAD 2012 (" $CVADSiteVersion.ProductVersion ")"
+﻿#try to install Citrix Snapins
+#wenn nicht möglich exit Script
+Try {
+
+    Add-PsSnapin "Citrix.*" -ErrorAction SilentlyContinue
+    if((Get-PSSnapin -Name "Citrix.*" -ErrorAction SilentlyContinue)){
+
+    }
+    Else{
+        Write-Output 'Kein Snapin installiert'
+        exit 3
+    }
+}Catch{
+    Write-Output "Kein Snapin installiert: $($_.Exception.Message)"
+    exit 3
+}
+
+try{
+    $CVADSiteVersion = Get-ConfigSite -ErrorAction Stop
+
+    #nur Major.Minor betrachten (z.B. "7.24" oder "7.24.0.0" -> 7.24)
+    #Vergleich über [version], als String wäre "7.9" größer als "7.28"
+    $ProductVersion = [version](($CVADSiteVersion.ProductVersion -split '\.')[0..1] -join '.')
+}
+catch{
+    Write-Output "Fehler beim auslesen der Site Version: $($_.Exception.Message)"
+    exit 3
+}
+
+if($ProductVersion -gt [version]"7.41"){
+    Write-Output "Aktueller als CVAD 2402 LTSR ($($CVADSiteVersion.ProductVersion))"
 }else{
 
-    Switch ($CVADSiteVersion.ProductVersion){
+    Switch ("$ProductVersion"){
+        "7.41"	{$CVADSiteVersionReal = "CVAD 2402 LTSR"; Break}
+        "7.40"	{$CVADSiteVersionReal = "CVAD 2311"; Break}
+        "7.39"	{$CVADSiteVersionReal = "CVAD 2308"; Break}
+        "7.38"	{$CVADSiteVersionReal = "CVAD 2305"; Break}
+        "7.37"	{$CVADSiteVersionReal = "CVAD 2303"; Break}
+        "7.36"	{$CVADSiteVersionReal = "CVAD 2212"; Break}
+        "7.35"	{$CVADSiteVersionReal = "CVAD 2209"; Break}
+        "7.34"	{$CVADSiteVersionReal = "CVAD 2206"; Break}
+        "7.33"	{$CVADSiteVersionReal = "CVAD 2203 LTSR"; Break}
+        "7.32"	{$CVADSiteVersionReal = "CVAD 2112"; Break}
+        "7.31"	{$CVADSiteVersionReal = "CVAD 2109"; Break}
+        "7.30"	{$CVADSiteVersionReal = "CVAD 2106"; Break}
+        "7.29"	{$CVADSiteVersionReal = "CVAD 2103"; Break}
         "7.28"	{$CVADSiteVersionReal = "CVAD 2012"; Break}
         "7.27"	{$CVADSiteVersionReal = "CVAD 2009"; Break}
         "7.26"	{$CVADSiteVersionReal = "CVAD 2006"; Break}
         "7.25"	{$CVADSiteVersionReal = "CVAD 2003"; Break}
-        "7.24"	{$CVADSiteVersionReal = "CVAD 1912"; Break}
+        "7.24"	{$CVADSiteVersionReal = "CVAD 1912 LTSR"; Break}
         "7.23"	{$CVADSiteVersionReal = "CVAD 1909"; Break}
         "7.22"	{$CVADSiteVersionReal = "CVAD 1906"; Break}
         "7.21"	{$CVADSiteVersionReal = "CVAD 1903"; Break}
@@ -17,7 +58,7 @@ if($CVADSiteVersion.ProductVersion -gt "7.28" ){
         "7.18"	{$CVADSiteVersionReal = "XA/XD 7.18"; Break}
         "7.17"	{$CVADSiteVersionReal = "XA/XD 7.17"; Break}
         "7.16"	{$CVADSiteVersionReal = "XA/XD 7.16"; Break}
-        "7.15"	{$CVADSiteVersionReal = "XA/XD 7.15"; Break}
+        "7.15"	{$CVADSiteVersionReal = "XA/XD 7.15 LTSR"; Break}
         "7.14"	{$CVADSiteVersionReal = "XA/XD 7.14"; Break}
         "7.13"	{$CVADSiteVersionReal = "XA/XD 7.13"; Break}
         "7.12"	{$CVADSiteVersionReal = "XA/XD 7.12"; Break}
@@ -25,12 +66,13 @@ if($CVADSiteVersion.ProductVersion -gt "7.28" ){
         "7.9"	{$CVADSiteVersionReal = "XA/XD 7.9"; Break}
         "7.8"	{$CVADSiteVersionReal = "XA/XD 7.8"; Break}
         "7.7"	{$CVADSiteVersionReal = "XA/XD 7.7"; Break}
-        "7.6"	{$CVADSiteVersionReal = "XA/XD 7.6"; Break}
+        "7.6"	{$CVADSiteVersionReal = "XA/XD 7.6 LTSR"; Break}
         "7.5"	{$CVADSiteVersionReal = "XA/XD 7.5"; Break}
         "7.1"	{$CVADSiteVersionReal = "XD 7.1"; Break}
         "7.0"	{$CVADSiteVersionReal = "XD 7.0"; Break}
-        Default	{$CVADSiteVersionReal = "Unknown"; Break}
+        Default	{$CVADSiteVersionReal = "Unknown ($($CVADSiteVersion.ProductVersion))"; Break}
     }
 
-    write $CVADSiteVersionReal
+    Write-Output $CVADSiteVersionReal
    }
+exit 0

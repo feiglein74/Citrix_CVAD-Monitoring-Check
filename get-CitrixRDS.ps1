@@ -1,4 +1,4 @@
-# get-CitrixRDS.ps1
+﻿# get-CitrixRDS.ps1
 # 07.10.2021
 # Gerhard Unter
 #
@@ -9,36 +9,36 @@
 # Edit - Gerhard Unter angepasster Try -Catch bei Add-Pssnapin
 #
 
-#try to install Citrix Snapins 
+#try to install Citrix Snapins
 #wenn nicht möglich exit Script
-Try { 
+Try {
 
     Add-PsSnapin "Citrix.*" -ErrorAction SilentlyContinue
-    if((Get-PSSnapin -Name "Citrix.*" -ErrorAction SilentlyContinue)){ 
+    if((Get-PSSnapin -Name "Citrix.*" -ErrorAction SilentlyContinue)){
 
-    } 
+    }
     Else{
-        Write-Host Kein Snapin installiert
+        Write-Output 'Kein Snapin installiert'
         exit 3
     }
 }Catch{
-    Write-Host Kein Snapin installiert
+    Write-Output "Kein Snapin installiert: $($_.Exception.Message)"
     exit 3
 }
 
 
 try{
-    #speichere einen laufenden worker in eine Variable 
-    $DesktopGroupMember = Get-BrokerMachine  | where SessionSupport -eq "Multisession" | where RegistrationState -eq Registered 
+    #speichere einen laufenden worker in eine Variable
+    $DesktopGroupMember = Get-BrokerMachine -ErrorAction Stop | Where-Object SessionSupport -eq "Multisession" | Where-Object RegistrationState -eq Registered
 
 
     #Lese den RDS Lizenz Server des Workers aus
-    $RDSLIC = Invoke-Command -ComputerName $DesktopGroupMember[0].DNSName {Get-ItemProperty -Path 'HKLm:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name LicenseServers } 
-    write-host $RDSLIC.LicenseServers
+    $RDSLIC = Invoke-Command -ComputerName $DesktopGroupMember[0].DNSName -ErrorAction Stop {Get-ItemProperty -Path 'HKLm:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services' -Name LicenseServers -ErrorAction Stop }
+    Write-Output "$($RDSLIC.LicenseServers)"
     exit 0
 }
 catch{
 
-    Write-Host Fehler beim auslesen des RDS Servers
+    Write-Output "Fehler beim auslesen des RDS Servers: $($_.Exception.Message)"
     exit 3
     }

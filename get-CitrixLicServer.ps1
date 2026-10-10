@@ -1,38 +1,41 @@
-#try to install Citrix Snapins 
+﻿#try to install Citrix Snapins
 #wenn nicht möglich exit Script
-Try { 
+Try {
 
     Add-PsSnapin "Citrix.*" -ErrorAction SilentlyContinue
-    if((Get-PSSnapin -Name "Citrix.*" -ErrorAction SilentlyContinue)){ 
+    if((Get-PSSnapin -Name "Citrix.*" -ErrorAction SilentlyContinue)){
 
-    } 
+    }
     Else{
-        Write-Host Kein Snapin installiert
+        Write-Output 'Kein Snapin installiert'
         exit 3
     }
 }Catch{
-    Write-Host Kein Snapin installiert
+    Write-Output "Kein Snapin installiert: $($_.Exception.Message)"
     exit 3
 }
 try{
 
-    #Lese den Lizenzserver aus
-    $lizenz = Get-BrokerController | select LastLicensingServerEventDetails
-    $lizenzserver = $lizenz[0].LastLicensingServerEventDetails -split ": "
+    #Lese den in der Site konfigurierten Lizenzserver aus
+    $lizenzserver = (Get-ConfigSite -ErrorAction Stop).LicenseServerName
+    if(-not $lizenzserver){
+        throw "Kein Lizenzserver in der Site konfiguriert"
+    }
 
-
-    #überprüfe ob es sich um den Lokalen Server handelt
-    $hostname = [System.Net.Dns]::GetHostByName('').hostname
-    if($lizenzserver -eq $hostname ){
-        Write-Host $true $lizenzserver[1]
+    #überprüfe ob es sich um den Lokalen Server handelt (Kurzname oder FQDN, Groß-/Kleinschreibung egal)
+    #Info-Check: beide Fälle enden mit exit 0
+    $fqdn = [System.Net.Dns]::GetHostByName('').hostname
+    $shortname = $env:COMPUTERNAME
+    if(($lizenzserver -eq $fqdn) -or ($lizenzserver -eq $shortname) -or ($lizenzserver -eq 'localhost')){
+        Write-Output "True $lizenzserver"
         exit 0
     }
     else{
-        Write-Host $false $lizenzserver[1]
+        Write-Output "False $lizenzserver"
         exit 0
-    }       
+    }
 }
 catch{
-    write-host Fehler beim auslesen
+    Write-Output "Fehler beim auslesen: $($_.Exception.Message)"
     exit 3
 }
