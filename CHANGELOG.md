@@ -2,6 +2,19 @@
 
 Alle relevanten Änderungen an diesem Projekt. Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach [SemVer](https://semver.org/lang/de/).
 
+## [2.0.0] – 2026-10-10
+
+### Geändert (Breaking)
+
+Dateinamen einheitlich in PascalCase (`Verb-Noun`). **Zwei Skripte haben einen neuen Namen – Aufrufe im Monitoring-Agent anpassen:**
+
+| Alt | Neu |
+|-----|-----|
+| `get-CitrixLicence.ps1` | `Get-CitrixLicense.ps1` (Schreibweise wie bei Citrix/PowerShell) |
+| `get-eventlog.ps1` | `Get-EventSourceReport.ps1` (kein Namenskonflikt mit dem Cmdlet `Get-EventLog`) |
+
+Nur Groß-/Kleinschreibung geändert (unter Windows ohne Anpassung lauffähig): `Get-CitrixLicServer.ps1`, `Get-CitrixRDS.ps1`, `Get-CitrixSFSync.ps1`, `Get-CitrixVersion.ps1`, `Get-CitrixWorker.ps1`.
+
 ## [1.0.1] – 2026-10-10
 
 ### Behoben

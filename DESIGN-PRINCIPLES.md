@@ -60,8 +60,8 @@ exit $returnCode
 
 Beispiele für bewusst beibehaltene Eigenheiten:
 - `Get-EventError.ps1` gibt nur den Statuscode aus (daher auch keine Fehlerdetails – Ausnahme zu Prinzip "Fehler-Details vollständig")
-- `get-CitrixWorker.ps1` trennt Datenzeilen mit ` ; ` (so hat `Write-Host` die Argumente früher verbunden)
-- `get-CitrixLicServer.ps1` gibt `True <server>` / `False <server>` aus und endet immer mit 0 (Info-Check)
+- `Get-CitrixWorker.ps1` trennt Datenzeilen mit ` ; ` (so hat `Write-Host` die Argumente früher verbunden)
+- `Get-CitrixLicServer.ps1` gibt `True <server>` / `False <server>` aus und endet immer mit 0 (Info-Check)
 
 ### Exit-Codes nach Nagios-Schema
 

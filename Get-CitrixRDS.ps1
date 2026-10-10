@@ -1,4 +1,4 @@
-﻿# get-CitrixRDS.ps1
+﻿# Get-CitrixRDS.ps1
 # 07.10.2021
 # Gerhard Unter
 #

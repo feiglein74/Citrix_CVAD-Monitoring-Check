@@ -22,8 +22,8 @@ git clone https://github.com/feiglein74/Citrix_CVAD-Monitoring-Check.git
 cd Citrix_CVAD-Monitoring-Check
 
 # on a Delivery Controller (Citrix PowerShell snap-ins required)
-.\get-CitrixVersion.ps1          # e.g. "CVAD 2203 LTSR"
-.\get-CitrixWorker.ps1           # all machines of the site, semicolon separated
+.\Get-CitrixVersion.ps1          # e.g. "CVAD 2203 LTSR"
+.\Get-CitrixWorker.ps1           # all machines of the site, semicolon separated
 
 # anywhere: critical if event 1000 occurs 10+ times within the last 4 hours
 .\Get-EventError.ps1 -EventId 1000 -Log Application -Hours 4 -Count 10
@@ -41,11 +41,11 @@ PowerShell-Skripte für den Health-Check einer Citrix Virtual Apps and Desktops 
 
 ## Voraussetzungen
 
-- Windows PowerShell 5.1 (PowerShell 7 für `Get-EventError.ps1` und `get-eventlog.ps1` ebenfalls möglich)
+- Windows PowerShell 5.1 (PowerShell 7 für `Get-EventError.ps1` und `Get-EventSourceReport.ps1` ebenfalls möglich)
 - Citrix-Skripte: Ausführung auf einem **Delivery Controller** (Citrix-Snapins `Citrix.*`)
-- `get-CitrixSFSync.ps1`: Ausführung auf einem **StoreFront-Server**
-- `get-CitrixLicence.ps1`: Zugriff auf den Lizenzserver über Port 8083
-- `get-CitrixRDS.ps1`: PowerShell-Remoting (WinRM) zu den Workern
+- `Get-CitrixSFSync.ps1`: Ausführung auf einem **StoreFront-Server**
+- `Get-CitrixLicense.ps1`: Zugriff auf den Lizenzserver über Port 8083
+- `Get-CitrixRDS.ps1`: PowerShell-Remoting (WinRM) zu den Workern
 
 ## Exit-Codes
 
@@ -64,14 +64,14 @@ Im Fehlerfall wird die Exception-Message mit ausgegeben (Ausnahme: `Get-EventErr
 
 | Skript | Läuft auf | Ausgabe | Exit-Code |
 |--------|-----------|---------|-----------|
-| `get-CitrixVersion.ps1` | DDC | Release-Name der Site, z.B. `CVAD 2203 LTSR` | 0 / 3 |
-| `get-CitrixLicServer.ps1` | DDC | `True <server>` wenn der Lizenzserver der lokale Server ist, sonst `False <server>` | 0 / 3 (Info-Check) |
-| `get-CitrixLicence.ps1` | DDC | Tabelle der Lizenzen (Produkt, Edition, Modell, Ablauf, Subscription Advantage, belegt/frei) | 0 / 3 |
-| `get-CitrixRDS.ps1` | DDC | RDS-Lizenzserver aus der Registry des ersten registrierten Multisession-Workers | 0 / 3 |
-| `get-CitrixWorker.ps1` | DDC | Alle Maschinen der Site als `;`-getrennte Liste | 0 / 3 |
-| `get-CitrixSFSync.ps1` | StoreFront | Tabelle des Replikationsstatus der StoreFront-Servergruppe | 0 / 3 |
+| `Get-CitrixVersion.ps1` | DDC | Release-Name der Site, z.B. `CVAD 2203 LTSR` | 0 / 3 |
+| `Get-CitrixLicServer.ps1` | DDC | `True <server>` wenn der Lizenzserver der lokale Server ist, sonst `False <server>` | 0 / 3 (Info-Check) |
+| `Get-CitrixLicense.ps1` | DDC | Tabelle der Lizenzen (Produkt, Edition, Modell, Ablauf, Subscription Advantage, belegt/frei) | 0 / 3 |
+| `Get-CitrixRDS.ps1` | DDC | RDS-Lizenzserver aus der Registry des ersten registrierten Multisession-Workers | 0 / 3 |
+| `Get-CitrixWorker.ps1` | DDC | Alle Maschinen der Site als `;`-getrennte Liste | 0 / 3 |
+| `Get-CitrixSFSync.ps1` | StoreFront | Tabelle des Replikationsstatus der StoreFront-Servergruppe | 0 / 3 |
 | `Get-EventError.ps1` | beliebig | Nur der Statuscode (`0`–`3`) | 0 / 1 / 2 / 3 |
-| `get-eventlog.ps1` | beliebig | Bericht: Event-Quellen nach Häufigkeit | – |
+| `Get-EventSourceReport.ps1` | beliebig | Bericht: Event-Quellen nach Häufigkeit | – |
 
 ### Get-EventError.ps1
 
@@ -91,15 +91,15 @@ Zählt das Vorkommen einer Event-ID in einem Zeitraum.
 
 Ausgabe ist **nur** der Statuscode, weil der Agent stdout auswertet. Fehlende Pflichtparameter oder ein nicht lesbares Log ergeben `3`.
 
-### get-eventlog.ps1
+### Get-EventSourceReport.ps1
 
 ```powershell
-.\get-eventlog.ps1 -Month 3 -Days 15
+.\Get-EventSourceReport.ps1 -Month 3 -Days 15
 ```
 
 System-Log: nur Einträge mit Level *Error*. Application-Log: alle Einträge. Beides gruppiert nach Quelle, absteigend nach Anzahl.
 
-### get-CitrixWorker.ps1
+### Get-CitrixWorker.ps1
 
 Spalten: `DeliveryGroup;DNSName;IPAddress;SessionSupport;InMaintenanceMode;Tags;PowerState;RegistrationState`
 
